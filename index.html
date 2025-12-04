@@ -1,1 +1,328 @@
+<!--
+Light Advanced Modern Dynamic Theme for HyperOS Blog
+File: index.html
+Usage (simple, child-friendly):
+1) Create a public GitHub repo (e.g. hyperos-blog)
+2) Add this file as `index.html` in repo root (Add file -> Create new file -> paste -> Commit)
+3) Settings -> Pages -> Source: main branch / root -> Save. Your site will be at https://YOUR-USERNAME.github.io/REPO-NAME
+4) To add posts: update the `posts` array below OR host a posts.json and change `POSTS_SOURCE` variable.
 
+Notes:
+- This is a single-file theme (HTML + CSS + JS). It's SEO-friendly (meta tags, JSON-LD), responsive, light-weight.
+- For production/Jekyll use: convert post objects to markdown files in _posts and adapt templates; I can provide conversion later.
+- Replace `YOUR-SITE-URL` and `YOUR-USERNAME` values in _config-like variables below.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HyperOS Themes — Curated Light & Modern</title>
+  <meta name="description" content="Curated HyperOS Themes, Xiaomi Themes & MIUI mtz Themes — clean previews, short reviews and download links.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="canonical" href="https://hyperos-themes/github.com/hyperos-blog">
+
+  <!-- Social/OpenGraph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="HyperOS Themes — Curated Light & Modern">
+  <meta property="og:description" content="Top HyperOS & Xiaomi Themes — previews, short reviews and download links.">
+  <meta property="og:url" content="https://hyperos-themes/github.com/hyperos-blog">
+  <meta property="og:image" content="https://hyperos-themes/github.com/image.png">
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://YOUR-SITE-URL/",
+    "name": "HyperOS Themes",
+    "description": "Curated HyperOS & Xiaomi Themes",
+    "publisher": {
+      "@type": "Organization",
+      "name": "HyperSkinz",
+      "url": "https://hyperos-themes/github.com/hyperos-blog"
+    }
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#f8fafc; --card:#ffffff; --muted:#6b7280; --accent:#0a5dd8; --radius:14px; --maxw:1100px;
+      --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; color:#0f172a;background:var(--bg);}
+    a{color:var(--accent);text-decoration:none}
+    header{backdrop-filter: blur(6px);background:linear-gradient(180deg,rgba(255,255,255,0.8),rgba(255,255,255,0.6));border-bottom:1px solid rgba(15,23,42,0.04);position:sticky;top:0;z-index:50}
+    .nav{max-width:var(--maxw);margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+    .brand .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#e6f0ff,#fff)}
+    .nav .search{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .search input{padding:10px 12px;border-radius:999px;border:1px solid rgba(15,23,42,0.06);width:220px}
+    .hero{max-width:var(--maxw);margin:26px auto;padding:26px;border-radius:18px;background:linear-gradient(180deg,#ffffff, #fbfdff);box-shadow:0 6px 22px rgba(2,6,23,0.04);display:grid;grid-template-columns:1fr 360px;gap:22px}
+    .hero h1{margin:0;font-size:28px}
+    .hero p{color:var(--muted);margin-top:8px}
+    .cta-buttons{margin-top:18px;display:flex;gap:10px}
+    .btn{padding:10px 14px;border-radius:12px;font-weight:600;border:1px solid transparent}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
+
+    /* layout */
+    .wrap{max-width:var(--maxw);margin:22px auto;display:grid;grid-template-columns:1fr 320px;gap:22px;padding:0 18px}
+    .card{background:var(--card);border-radius:var(--radius);padding:18px;border:1px solid rgba(15,23,42,0.04);}
+
+    /* posts */
+    .posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+    .post-card{overflow:hidden;border-radius:12px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,#fff,#fcfdff);transition:transform .18s ease, box-shadow .18s ease}
+    .post-card:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(2,6,23,0.06)}
+    .thumb{height:150px;background:#eef2ff;display:block;width:100%;object-fit:cover}
+    .pcontent{padding:12px}
+    .title{font-size:16px;font-weight:700;margin:0}
+    .excerpt{color:var(--muted);font-size:13px;margin-top:8px}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{background:rgba(10,93,216,0.08);padding:6px 8px;border-radius:999px;font-size:12px;color:var(--accent)}
+
+    /* sidebar */
+    .sidebar .section{margin-bottom:18px}
+    .small-list{display:flex;flex-direction:column;gap:8px}
+    .small-list a{padding:10px;border-radius:8px;background:rgba(10,93,216,0.03);font-weight:600}
+
+    footer{max-width:var(--maxw);margin:32px auto;padding:18px;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:900px){.hero{grid-template-columns:1fr;}.wrap{grid-template-columns:1fr}.nav .search input{width:120px}}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden></div>
+        <div>
+          <div style="font-size:16px">HyperOS Themes</div>
+          <div style="font-size:12px;color:var(--muted)">Curated Xiaomi & MIUI Themes</div>
+        </div>
+      </div>
+
+      <nav class="search" aria-label="top-controls">
+        <input id="search" type="search" placeholder="Search themes, tags..." aria-label="Search themes">
+        <select id="filter" title="Filter">
+          <option value="all">All categories</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>Light • Advanced • Modern — Curated HyperOS Themes</h1>
+        <p>Fast previews, short honest reviews and direct links. Built for speed and backlinks — each listing includes a canonical link to your original article.</p>
+        <div class="cta-buttons">
+          <a class="btn primary" id="newPostBtn">Add New Post</a>
+          <a class="btn ghost" href="#examples">See Examples</a>
+        </div>
+
+        <div style="margin-top:16px">
+          <strong>How it works:</strong>
+          <ol style="margin:8px 0 0 16px;color:var(--muted)">
+            <li>Maintain short post objects (title, excerpt, tags, image, link).</li>
+            <li>GitHub Pages serves this index.html — fast and SEO-friendly.</li>
+            <li>Each card links back to your full post on HyperSkinz for backlink value.</li>
+          </ol>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h4 style="margin:0 0 8px 0">Quick Stats</h4>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="font-weight:700;font-size:18px">120+</div>
+            <div style="color:var(--muted)">Themes curated</div>
+          </div>
+          <hr style="margin:12px 0">
+          <div style="color:var(--muted);font-size:13px">Tip: Keep each GitHub post short and link to full article on HyperSkinz.</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="wrap">
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <h3 style="margin:0">Latest Themes</h3>
+            <div style="color:var(--muted);font-size:13px" id="count">0 items</div>
+          </div>
+
+          <div class="posts" id="postsGrid" aria-live="polite">
+            <!-- JS will render posts here -->
+          </div>
+        </div>
+
+        <div style="margin-top:18px" id="examples"></div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="card section">
+          <h4 style="margin:0 0 10px 0">Categories</h4>
+          <div class="small-list" id="categoryList"></div>
+        </div>
+
+        <div class="card section">
+          <h4 style="margin:0 0 10px 0">Popular</h4>
+          <div class="small-list" id="popularList"></div>
+        </div>
+
+        <div class="card section">
+          <h4 style="margin:0 0 10px 0">Subscribe</h4>
+          <form id="subscribeForm">
+            <input type="email" placeholder="Email" required style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06)">
+            <button type="submit" class="btn primary" style="width:100%;margin-top:8px">Subscribe</button>
+          </form>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> HyperOS Themes — Built for backlinks. Hosted on GitHub Pages.
+  </footer>
+
+  <script>
+    // CONFIG
+    const SITE_URL = 'https://YOUR-SITE-URL'; // replace
+    const POSTS_SOURCE = null; // if null, uses embedded POSTS array below. Or set to 'posts.json' to fetch remotely.
+
+    // Demo posts - replace or keep short versions that link to your full HyperSkinz articles
+    const POSTS = [
+      {
+        id: 'parKing-2025',
+        title: 'ParKING HyperOS Theme — Minimal Dark v2',
+        excerpt: 'Clean dock, crisp icons and fast performance. Short review with screenshots.',
+        image: 'https://i.imgur.com/8Km9tLL.jpg',
+        tags: ['HyperOS','MIUI','ParKING'],
+        url: 'https://www.hyperskinz.com/2025/12/download-parking-hyperos-theme.html',
+        date: '2025-12-01'
+      },
+      {
+        id: 'ichi-ocha',
+        title: 'Ichi Ocha V5 — Soft Pastel HyperOS Theme',
+        excerpt: 'Pastel palette, soft icons and rounded corners. Best for light lovers.',
+        image: 'https://i.imgur.com/2nCt3Sbl.jpg',
+        tags: ['HyperOS','Xiaomi','Ichi Ocha'],
+        url: 'https://www.hyperskinz.com/2025/12/ichi-ocha-v5-hyperos-theme.html',
+        date: '2025-11-28'
+      },
+      {
+        id: 'top-10-list',
+        title: 'Top 10 Best HyperOS Themes — 2025 Picks',
+        excerpt: 'Quick list of best themes with direct download links to full reviews.',
+        image: 'https://i.imgur.com/5Y5b5QZ.jpg',
+        tags: ['list','Top 10','curation'],
+        url: 'https://www.hyperskinz.com/2025/12/top-10-best-hyperos-themes.html',
+        date: '2025-12-04'
+      }
+    ];
+
+    // Utility: create element
+    function el(tag, props={}, children=[]) {
+      const node = document.createElement(tag);
+      for (const k in props) {
+        if (k === 'class') node.className = props[k];
+        else if (k === 'html') node.innerHTML = props[k];
+        else node.setAttribute(k, props[k]);
+      }
+      children.forEach(c => node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c));
+      return node;
+    }
+
+    // Render functions
+    function renderPosts(posts){
+      const grid = document.getElementById('postsGrid'); grid.innerHTML = '';
+      posts.forEach(p => {
+        const card = el('article',{class:'post-card', role:'article'});
+        const img = document.createElement('img'); img.className='thumb'; img.alt = p.title; img.loading='lazy'; img.src = p.image;
+        card.appendChild(img);
+        const pc = el('div',{class:'pcontent'});
+        pc.appendChild(el('h3',{class:'title'},[document.createTextNode(p.title)]));
+        pc.appendChild(el('p',{class:'excerpt'},[document.createTextNode(p.excerpt)]));
+        const meta = el('div',{class:'meta'});
+        const tagsWrap = el('div',{class:'tags'});
+        p.tags.forEach(t => tagsWrap.appendChild(el('span',{class:'tag'},[document.createTextNode(t)])));
+        const read = el('a',{href:p.url,target:'_blank'},[document.createTextNode('Read ➜')]);
+        meta.appendChild(tagsWrap); meta.appendChild(read);
+        pc.appendChild(meta);
+        card.appendChild(pc);
+        grid.appendChild(card);
+      });
+      document.getElementById('count').textContent = posts.length + ' items';
+    }
+
+    function buildCategoryList(posts){
+      const cats = new Map();
+      posts.forEach(p => p.tags.forEach(t => cats.set(t, (cats.get(t)||0)+1)));
+      const container = document.getElementById('categoryList'); container.innerHTML = '';
+      const select = document.getElementById('filter'); select.innerHTML = '<option value="all">All categories</option>';
+      Array.from(cats.keys()).sort().forEach(cat => {
+        const a = el('a',{},[document.createTextNode(`${cat} (${cats.get(cat)})`)]);
+        a.href = '#'; a.addEventListener('click', e => { e.preventDefault(); filterByTag(cat); });
+        container.appendChild(a);
+        const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; select.appendChild(opt);
+      });
+    }
+
+    function buildPopular(posts){
+      const container = document.getElementById('popularList'); container.innerHTML = '';
+      posts.slice(0,5).forEach(p => {
+        const a = el('a',{href:p.url,target:'_blank'},[document.createTextNode(p.title)]);
+        container.appendChild(a);
+      });
+    }
+
+    function filterByTag(tag){
+      if(tag==='all') renderPosts(currentPosts);
+      else renderPosts(currentPosts.filter(p => p.tags.includes(tag)));
+    }
+
+    // Search function
+    function doSearch(q){
+      const ql = q.trim().toLowerCase();
+      if(!ql) renderPosts(currentPosts);
+      else renderPosts(currentPosts.filter(p => (p.title + ' ' + p.excerpt + ' ' + p.tags.join(' ')).toLowerCase().includes(ql)));
+    }
+
+    // Init
+    let currentPosts = [];
+    async function init(){
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      if(POSTS_SOURCE){
+        try{
+          const res = await fetch(POSTS_SOURCE); currentPosts = await res.json();
+        }catch(e){ currentPosts = POSTS; }
+      } else currentPosts = POSTS;
+
+      // sort by date desc
+      currentPosts.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      renderPosts(currentPosts);
+      buildCategoryList(currentPosts);
+      buildPopular(currentPosts);
+
+      document.getElementById('search').addEventListener('input', e => doSearch(e.target.value));
+      document.getElementById('filter').addEventListener('change', e => filterByTag(e.target.value));
+      document.getElementById('subscribeForm').addEventListener('submit', e => { e.preventDefault(); alert('Subscribed — save email to your CRM or GitHub Issues.'); });
+
+      document.getElementById('newPostBtn').addEventListener('click', () => {
+        const template = `\n{\n  id: 'new-post-'+Date.now(),\n  title: 'New Theme Title',\n  excerpt: 'Short 1–2 line excerpt',\n  image: 'https://i.imgur.com/yourimage.jpg',\n  tags: ['HyperOS'],\n  url: 'https://www.hyperskinz.com/2025/12/new-post.html',\n  date: '${new Date().toISOString().slice(0,10)}'\n}\n`;
+        navigator.clipboard?.writeText(template).then(()=> alert('Post template copied to clipboard — paste into POSTS array in index.html and commit to GitHub.'));
+      });
+    }
+
+    init();
+
+  </script>
+</body>
+</html>
